@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="./styles.css">
+<body>
+<div class="container" ng-app="test" ng-controller="routrCtrl">
+<div class="loginCtrl" ng-show="login">
+  <div class="card col-md-6 col-md-push-3 panel panel-default">
+    <div class="panel-body">
+      <h3>Please login:</h3>
+      <form>
+        <div class="form-group">
+          <!-- <label for="name">UserId:</label> -->
+          <input type="text" ng-model="name" placeholder="Username" />
+        </div>
+        <div class="form-group">
+          <!-- <label for="password">Password:</label> -->
+          <input type="password" ng-model="password" placeholder="Password" >
+        </div>
+      </form>
+      <div class="alert alert-danger alert-dismissible" ng-show="error">
+          <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+         {{ error }} </div>
+    </div>
+    <button class="btn btn-success" ng-click="checkCredential()" angular-ripple> Submit  </button>
+  </div>
+</div>
+<div class="quizCtrl"  ng-show="quiz">
+  <div class="timer col-md-2 pull-right panel panel-default">
+    <div class="panel-body">
+      <div class="timer text-center">
+        <h2>{{ roundTime(timercount) }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-md-push-3">
+    <div>
+        <h2>Quiz</h2>
+    </div>
+    <div class="card panel panel-default"  ng-repeat="(key1, question) in questions"  ng-if="questionNumber === key1">
+        <div class="panel-body">
+          <div class="question">
+            {{ question.question }}
+          </div>
+          <div class="answers">
+              <div class="answer" data-question={{key1}} data-answer={{key2}} ng-repeat="(key2, answer) in question.options" ng-click="checkAnswer()"  angular-ripple>
+                  {{answer}}
+              </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+<div class="resultCtrl text-center"  ng-show="result">
+  <div class="card col-md-6 col-md-push-3 panel panel-default">
+    <div class="panel-body">
+      <canvas id="myChart" width="200px" height="200px"></canvas>
+      This is your result: {{ results }}
+    </div>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script type="text/javascript" src="./angular_ripple.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+<script src="./quiz.js"></script>
+</body>
+</html>
