@@ -62,14 +62,15 @@ app.controller("routrCtrl", function($scope, $interval) {
   $scope.checkAnswer = function(){
     event.preventDefault();
     event.stopPropagation();
-    const question = event.target.getAttribute('data-question') ? event.target.getAttribute('data-question') : event.target.parentElement.getAttribute('data-question');
-    const answer = event.target.getAttribute('data-answer') ? event.target.getAttribute('data-answer') : event.target.parentElement.getAttribute('data-answer');
+    const evnt = event.target.getAttribute('data-question') ? event.target : event.target.parentElement;
+    const question = evnt.getAttribute('data-question');
+    const answer = evnt.getAttribute('data-answer');
     answersStack[$scope.questionNumber] = (answersStack[$scope.questionNumber]) ? answersStack[$scope.questionNumber]+1 : 1;
     if(quiz_questions[question]["answer"] === (parseInt(answer)+1)){
-      event.target.setAttribute("class", "answer green");
+      evnt.setAttribute("class", "answer green");
       $scope.questionNumber++;
     }else{
-      event.target.setAttribute("class", "answer shake");
+      evnt.setAttribute("class", "answer shake");
     }
     if($scope.questionNumber >= quiz_questions.length) {
       $interval.cancel($scope.timer)
