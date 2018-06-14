@@ -33,18 +33,19 @@ const quiz_questions = [
 
 
 const app = angular.module("test",['angularRipple']);
-app.controller("routrCtrl", function($scope, $interval) {
-  let answersStack = [];
+app.controller("routrCtrl", function($scope, $interval, $timeout) {
+  $scope.answersStack = [];
   $scope.login = true;
   $scope.quiz = false;
   $scope.result = false;
-
+  $scope.message = 'hide';
+  $scope.correctAnswers= 0;
   $scope.questionNumber=0;
   $scope.questions = quiz_questions;
   $scope.timercount = 180;
   $scope.checkCredential = function(){
     if(($scope.name.toLowerCase()==='zolo' && $scope.password === '123')) {
-      setTimeout(function(){
+      $timeout(function(){
         $scope.login = false;
         $scope.quiz = true;
         $scope.timer = $interval(function () {
@@ -65,36 +66,47 @@ app.controller("routrCtrl", function($scope, $interval) {
     const evnt = event.target.getAttribute('data-question') ? event.target : event.target.parentElement;
     const question = evnt.getAttribute('data-question');
     const answer = evnt.getAttribute('data-answer');
-    answersStack[$scope.questionNumber] = (answersStack[$scope.questionNumber]) ? answersStack[$scope.questionNumber]+1 : 1;
+    $scope.answersStack.push(parseInt(answer)+1);
     if(quiz_questions[question]["answer"] === (parseInt(answer)+1)){
       evnt.setAttribute("class", "answer green");
-      $scope.questionNumber++;
+      $scope.message = 'correct';
+      $scope.correctAnswers++;
     }else{
       evnt.setAttribute("class", "answer shake");
+      $scope.message = 'in-correct';
     }
-    if($scope.questionNumber >= quiz_questions.length) {
-      $interval.cancel($scope.timer)
-      $scope.showResults();
-    }
+    // check your wait code here
+    $timeout(function(){
+      $scope.questionNumber++;
+      if($scope.questionNumber >= quiz_questions.length) {
+        $interval.cancel($scope.timer)
+        $scope.showResults();
+      }
+    },500);
+    // check your wait code here
+    $timeout(function(){
+      $scope.message = 'hide';
+    },400);
   }
   $scope.showResults = function(){
     $scope.quiz = false;
     $scope.result = true;
-    $scope.results= "Number of attempts: " + answersStack.reduce(function(total, num){ return total + num });
     var ctx = document.getElementById("myChart");
     var attempts = {
-        label: 'Number of attempts',
-        data: answersStack,
+        label: 'Your attempts',
+        data: [$scope.correctAnswers, $scope.questions.length - $scope.correctAnswers ],
         backgroundColor: [
-            'rgba(255, 99, 132, 0)'
+            'rgba(0,255,0,0.3)',
+            'rgba(255,0,0,0.3)'
         ],
         borderColor: [
-            'rgba(255,99,132,1)'
+            'rgba(0,255,0,0.3)',
+            'rgba(255,0,0,0.3)'
         ],
         borderWidth: 1
     };
     var data = {
-        labels: ["1", "2", "3", "4", "5", "6"],
+        labels: ["correct", "in-correct"],
         datasets: [attempts]
     }
     var options = {
@@ -102,7 +114,7 @@ app.controller("routrCtrl", function($scope, $interval) {
             yAxes: [{
                 ticks: {
                     steps: 1,
-                    max: 5,
+                    max: 7,
                     beginAtZero: true,
                     callback: function(value, index, values) {
                         if (Math.floor(value) === value) {
@@ -114,7 +126,7 @@ app.controller("routrCtrl", function($scope, $interval) {
         }
     };
     var myChart = new Chart(ctx, {
-        type: 'line',
+        type: 'bar',
         data: data,
         options: options
     });
