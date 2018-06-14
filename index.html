@@ -30,13 +30,14 @@
   <div class="timer col-md-2 pull-right panel panel-default">
     <div class="panel-body">
       <div class="timer text-center">
+        <p>Time Remaining:</p>
         <h2>{{ roundTime(timercount) }}</h2>
       </div>
     </div>
   </div>
   <div class="col-md-6 col-md-push-3">
     <div>
-        <h2>Quiz</h2>
+        <h2>Quiz <span class="pull-right">{{questionNumber+1}}/6</span></h2>
     </div>
     <div class="card panel panel-default"  ng-repeat="(key1, question) in questions"  ng-if="questionNumber === key1">
         <div class="panel-body">
@@ -51,18 +52,32 @@
         </div>
       </div>
   </div>
+  <div class="toast correct" ng-class="message" >
+    {{ message }} answer !
+  </div>
 </div>
 <div class="resultCtrl text-center"  ng-show="result">
   <div class="card col-md-6 col-md-push-3 panel panel-default">
     <div class="panel-body">
       <canvas id="myChart" width="200px" height="200px"></canvas>
-      This is your result: {{ results }}
+      <p>You got {{correctAnswers}} / {{questions.length}} right!</p>
     </div>
+
+    <div class="card panel panel-default text-left final-answers"  ng-repeat="(key1, question) in questions">
+        <div class="panel-body">
+          <div class="question">
+            {{key1+1}}. {{ question.question }}
+          </div>
+          <div class="answers">
+              <div class="answer" ng-class="{'text-success': answersStack[key1]-1 === key2 && key2 === question.answer-1 , 'text-danger': answersStack[key1]-1 === key2 && key2 !== question.answer-1  }" data-question={{key1}} data-answer={{key2}} ng-repeat="(key2, answer) in question.options" ng-click="checkAnswer()"  angular-ripple>
+                  - {{answer}} <span ng-if="key2 === question.answer-1" > ✓ -correct answer</span>
+              </div>
+          </div>
+        </div>
+      </div>
   </div>
 </div>
-<div class="toast correct" ng-class="message" >
-  {{ message }} answer !
-</div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <script type="text/javascript" src="./angular_ripple.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
