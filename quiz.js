@@ -80,7 +80,7 @@ app.controller("routrCtrl", function($scope, $interval) {
   $scope.showResults = function(){
     $scope.quiz = false;
     $scope.result = true;
-    $scope.results= (answersStack.reduce(function(total, num){ return total + num })/(quiz_questions.length*4))*100;
+    $scope.results= "Number of attempts: " + answersStack.reduce(function(total, num){ return total + num });
     var ctx = document.getElementById("myChart");
     var attempts = {
         label: 'Number of attempts',
