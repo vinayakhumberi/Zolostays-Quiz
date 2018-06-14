@@ -43,7 +43,7 @@ app.controller("routrCtrl", function($scope, $interval) {
   $scope.questions = quiz_questions;
   $scope.timercount = 180;
   $scope.checkCredential = function(){
-    if(($scope.name.toLowerCase();==='zolo' && $scope.password === '123')) {
+    if(($scope.name.toLowerCase()==='zolo' && $scope.password === '123')) {
       setTimeout(function(){
         $scope.login = false;
         $scope.quiz = true;
