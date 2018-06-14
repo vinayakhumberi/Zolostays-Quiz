@@ -86,7 +86,7 @@ app.controller("routrCtrl", function($scope, $interval, $timeout) {
     // check your wait code here
     $timeout(function(){
       $scope.message = 'hide';
-    },400);
+    },600);
   }
   $scope.showResults = function(){
     $scope.quiz = false;
